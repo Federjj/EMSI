@@ -63,8 +63,7 @@ namespace EMSI_Corporation.Controllers
                 var usuario = _appDBContext.usuarios
                 .Include(u => u.UserRoles)
                 .ThenInclude(ur => ur.Rol)
-                .FirstOrDefault(u =>
-                EF.Functions.Collate(u.usuario, "Latin1_General_CS_AS") == User.Identity.Name);
+                .FirstOrDefault(u => u.usuario == User.Identity.Name);
                 user_id = usuario.IdUsuario;
                 User.IsInRole("Administrador");
                 var a = User.Claims.ElementAt(2).Value;
@@ -93,8 +92,7 @@ namespace EMSI_Corporation.Controllers
             var usuario = await _appDBContext.usuarios
                 .Include(u => u.UserRoles)
                 .ThenInclude(ur => ur.Rol)
-                .FirstOrDefaultAsync(u =>
-                EF.Functions.Collate(u.usuario, "Latin1_General_CS_AS") == modelo.Username);
+                .FirstOrDefaultAsync(u => u.usuario == modelo.Username);
 
             if (usuario == null)
             {
