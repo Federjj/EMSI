@@ -13,10 +13,24 @@ QuestPDF.Settings.License = LicenseType.Community;
 builder.Services.AddControllersWithViews();
 
 // Configurar conexión a PostgreSQL
-var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL");
-if (string.IsNullOrEmpty(connectionString))
+var envVar = Environment.GetEnvironmentVariable("DATABASE_URL");
+string connectionString;
+
+if (!string.IsNullOrEmpty(envVar))
 {
-    // Usar cadena local si no hay variable de entorno
+    // Parsear la URL de la base de datos (formato Railway)
+    var uri = new Uri(envVar);
+    var host = uri.Host;
+    var port = uri.Port;
+    var database = uri.AbsolutePath.TrimStart('/');
+    var user = uri.UserInfo.Split(':')[0];
+    var password = uri.UserInfo.Split(':')[1];
+
+    // Construir connection string compatible con Npgsql
+    connectionString = $"Host={host};Port={port};Database={database};Username={user};Password={password};SSL Mode=Require;Trust Server Certificate=true";
+}
+else
+{
     connectionString = builder.Configuration.GetConnectionString("CadenaSQL");
 }
 
