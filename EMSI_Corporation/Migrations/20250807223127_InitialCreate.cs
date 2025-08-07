@@ -115,9 +115,9 @@ namespace EMSI_Corporation.Migrations
                 {
                     IdReporte = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    FirmaCliente = table.Column<byte[]>(type: "VARBINARY(MAX)", nullable: false),
+                    FirmaCliente = table.Column<byte[]>(type: "bytea", nullable: false),
                     Observaciones = table.Column<string>(type: "text", nullable: false),
-                    ImgEvidencia = table.Column<byte[]>(type: "VARBINARY(MAX)", nullable: false),
+                    ImgEvidencia = table.Column<byte[]>(type: "bytea", nullable: false),
                     Cliente_ID = table.Column<int>(type: "integer", nullable: false),
                     Comprobante_ID = table.Column<int>(type: "integer", nullable: false)
                 },

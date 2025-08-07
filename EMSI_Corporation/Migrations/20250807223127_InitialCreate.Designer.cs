@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EMSI_Corporation.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20250807210021_InitialCreate")]
+    [Migration("20250807223127_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -507,11 +507,11 @@ namespace EMSI_Corporation.Migrations
 
                     b.Property<byte[]>("FirmaCliente")
                         .IsRequired()
-                        .HasColumnType("VARBINARY(MAX)");
+                        .HasColumnType("bytea");
 
                     b.Property<byte[]>("ImgEvidencia")
                         .IsRequired()
-                        .HasColumnType("VARBINARY(MAX)");
+                        .HasColumnType("bytea");
 
                     b.Property<string>("Observaciones")
                         .IsRequired()

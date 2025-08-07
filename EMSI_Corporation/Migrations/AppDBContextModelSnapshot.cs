@@ -504,11 +504,11 @@ namespace EMSI_Corporation.Migrations
 
                     b.Property<byte[]>("FirmaCliente")
                         .IsRequired()
-                        .HasColumnType("VARBINARY(MAX)");
+                        .HasColumnType("bytea");
 
                     b.Property<byte[]>("ImgEvidencia")
                         .IsRequired()
-                        .HasColumnType("VARBINARY(MAX)");
+                        .HasColumnType("bytea");
 
                     b.Property<string>("Observaciones")
                         .IsRequired()
