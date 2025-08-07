@@ -18,16 +18,36 @@ string connectionString;
 
 if (!string.IsNullOrEmpty(envVar))
 {
-    // Parsear la URL de la base de datos (formato Railway)
-    var uri = new Uri(envVar);
-    var host = uri.Host;
-    var port = uri.Port;
-    var database = uri.AbsolutePath.TrimStart('/');
-    var user = uri.UserInfo.Split(':')[0];
-    var password = uri.UserInfo.Split(':')[1];
+    try
+    {
+        // Railway usa formato: postgresql://user:password@host:port/dbname
+        // Normalizar a formato URI estándar
+        if (envVar.StartsWith("postgresql://"))
+        {
+            envVar = "postgres://" + envVar.Substring("postgresql://".Length);
+        }
 
-    // Construir connection string compatible con Npgsql
-    connectionString = $"Host={host};Port={port};Database={database};Username={user};Password={password};SSL Mode=Require;Trust Server Certificate=true";
+        var uri = new Uri(envVar);
+        var host = uri.Host;
+        var port = uri.Port;
+        var database = uri.AbsolutePath.TrimStart('/');
+        var user = uri.UserInfo.Split(':')[0];
+        var password = uri.UserInfo.Split(':')[1];
+
+        // Construir connection string con configuración SSL robusta
+        connectionString = $"Host={host};Port={port};Database={database};" +
+                          $"Username={user};Password={password};" +
+                          "SSL Mode=Require;" +
+                          "Trust Server Certificate=true;" +
+                          "Pooling=true;" +
+                          "Timeout=30;";
+    }
+    catch (Exception ex)
+    {
+        // Registrar error detallado
+        Console.WriteLine($"Error parsing DATABASE_URL: {ex}");
+        throw;
+    }
 }
 else
 {
@@ -36,7 +56,14 @@ else
 
 builder.Services.AddDbContext<AppDBContext>(option =>
 {
-    option.UseNpgsql(connectionString);
+    option.UseNpgsql(connectionString, npgsqlOptions =>
+    {
+        npgsqlOptions.EnableRetryOnFailure(
+            maxRetryCount: 5,
+            maxRetryDelay: TimeSpan.FromSeconds(30),
+            errorCodesToAdd: null
+        );
+    });
 });
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
