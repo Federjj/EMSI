@@ -1,0 +1,61 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+@model EMSI_Corporation.ViewModels.LoginVM;
+
+<!-- Anulamos el header y footer -->
+@{
+    Layout = null;
+}
+
+<!-- CODIGO HTML -->
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/loginStyle.css" asp-append-version="true" />
+</head>
+<body class="login-body">
+    <div class="sqr-anim"></div>
+    <!--Contenedor Principal-->
+    <div class="container">
+        <!--Panel Izquierdo-->
+        <div class="panel-izquierdo">
+            <img src="~/Imagenes/EMSI_logo.png" />
+        </div>
+        <!--Panel Derecho-->
+        <div class="panel-derecho">
+            <div class="Titulo">
+                LOGIN
+            </div>
+            <div class="cuerpo">
+                <div asp-validation-summary="All" class="text-danger text-center mb-2"></div>
+                <form asp-controller="Acceso" asp-action="Login" method="post" class="formulario">
+                    <label>Usuario</label>
+                    <input class="form_input" type="text" placeholder="Ingresar Usuario" required asp-for="Username" />
+
+                    <label>Contraseña</label>
+                    <input class="form_input" type="password" placeholder="Ingresar Contraseña" required asp-for="Password" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+
+                    <div class="boton_ingresar">
+                        <button>Ingresar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    @section Scripts {
+        <partial name="_ValidationScriptsPartial" />
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+        <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    }
+</body>
+</html>

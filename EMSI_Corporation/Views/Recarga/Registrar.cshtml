@@ -1,0 +1,205 @@
+﻿@model EMSI_Corporation.ViewModels.ServicioRecargaVM;
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var extintores = ViewBag.extintores as List<EMSI_Corporation.Models.Extintor>;//Se supone que quite esto para acceder desde el sidebar
+    var recargas = ViewBag.recargas as List<EMSI_Corporation.Models.Recarga>;
+    var cliente_trabajador = ViewBag.cliente_trabajador as EMSI_Corporation.ViewModels.ClienteTrabajadorVM;
+    Extintor? extintor = null;
+
+    var total = 0.0;
+}
+
+<main>
+
+
+    <form asp-controller="Recarga" asp-action="Registrar" method="post" class="mantenimiento">
+        <div class="seccion sec-mant-servicio">
+            <h1 class="titulo">Servicio</h1>
+            <div class="form-line">
+                <span>Cliente:</span>
+                <span>@cliente_trabajador.cliente.NomCliente</span>
+                <input hidden asp-for="Cliente_ID" value=@cliente_trabajador.clienteID />
+            </div>
+            <div class="form-line">
+                <span>Extintor (solo se muestran aquellos que han sido vendidos):</span>
+                <select class="field" asp-for="Extintor_ID" id="extintorSelect">
+                    @foreach (var ext in extintores)
+                    {
+                        @if (ext.Venta_ID > 0 || ext.Venta_ID != null)
+                        {
+                            <option value=@ext.IdExtintor>@ext.IdExtintor</option>
+                        }
+                    }
+                </select>
+            </div>
+            <div class="form-line">
+                <span>Fecha:</span>
+                <input type="date" class="field">
+            </div>
+            <div class="form-line">
+                <span>Precio unitario:</span>
+                <input asp-for="PrecioUnitario" type="text" class="field" id="precioUnitario">
+            </div>
+            <h3 class="titulo">Productos</h3>
+            @if (extintores.Count > 0)
+            {
+                <a class="btn btn-1" id="btnAgregarProducto">
+                    Agregar producto
+                </a>
+            }
+
+
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Empleado a cargo</th>
+                        <th scope="col">ID Extintor</th>
+                        <th scope="col">Ha sido usado?</th>
+                        <th scope="col">Está visible?</th>
+                        <th scope="col">% de validez</th>
+                        <th scope="col">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (var rec in recargas)
+                    {
+                        <tr>
+                            <th scope="row">@rec.IdRecarga</th>
+                            <td>@cliente_trabajador.empleado.nomEmpleado</td>
+                            <td>@rec.Extintor_ID</td>
+                            <td>@rec.MaterialUsado</td>
+                            <td>@rec.CantidadKG</td>
+                            <td>per</td>
+                            <td></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <p id="subtotalLabel">Total:</p>
+            <a asp-controller="Recarga" asp-action="DescargarExcel" class="btn btn-primary">Descargar Excel</a>
+        </div>
+
+        <div class="seccion sec-mant-observaciones">
+            <h1 class="titulo">OBSERVACIONES</h1>
+            <div class="form-line">
+                <textarea id="" cols="30" rows="10" class="field w-100" asp-for="Observaciones"></textarea>
+            </div>
+
+            <h1 class="titulo">FIRMA</h1>
+            <p>Firma cliente</p>
+            <canvas id="myCanvas" width="200" height="100" style="border:1px solid black;"></canvas>
+            <div class="canvas-btns">
+                <button id="canvas-clear" class="">del</button>
+                <button id="canvas-save" class="">save</button>
+            </div>
+
+            <button type="submit" class="btn-1">Añadir</button>
+        </div>
+    </form>
+</main>
+
+<script>
+
+    const canvas = document.getElementById("myCanvas");
+    const canvas_clear_btn = document.getElementById("canvas-clear");
+    const canvas_save_btn = document.getElementById("canvas-save");
+    const ctx = canvas.getContext("2d");
+    ctx.lineWidth = 3;
+    ctx.lineCap = 'round';
+    ctx.strokeStyle = 'black';
+    let isDrawing = false;
+
+    function startPosition(e) {
+        console.log("first")
+        isDrawing = true;
+        ctx.beginPath();
+    }
+    function endPosition(e) {
+        isDrawing = false;
+    }
+
+    const drawing = (e) => {
+        if (!isDrawing) return;
+        ctx.lineTo(e.offsetX, e.offsetY);
+        ctx.stroke();
+    }
+
+    const clear = () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+    const fillBG = () => {
+        ctx.fillStyle = "#fff";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "#000";
+    }
+    //tutorial imgs:
+    //https://www.youtube.com/watch?v=HEWxvpHVwKw
+    const saveIMG = () => {
+        const link = document.createElement("a")
+        link.download = "firma.jpg";
+        link.href = canvas.toDataURL();
+        link.click();
+    }
+
+    window.addEventListener("load", () => {
+        canvas.height = canvas.offsetHeight;
+        canvas.width = canvas.offsetWidth;
+        fillBG();
+    })
+    canvas.addEventListener("mousedown", startPosition);
+    canvas.addEventListener("mouseup", endPosition);
+    canvas.addEventListener("mousemove", drawing);
+
+    canvas_clear_btn.addEventListener("click", fillBG);
+    canvas_save_btn.addEventListener("click", saveIMG);
+
+
+    /*
+    const excelBTN = document.querySelector("#boton-excel");
+    excelBTN.addEventListener("click", () => {
+        fetch("@Url.Action("DownExcel")", {
+            method: "GET",
+            responseType: 'blob'
+        }).then(data => {
+            console.log(data);
+            saveExcel(data)
+        })
+    })*/
+
+    const saveExcel = (response) => {
+        var headers = response.headers;
+        var blob = new Blob([response.data],
+            { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' },
+        );
+
+        window.open(window.URL.createObjectURL(blob));
+    }
+
+    const addprod = () => {
+        console.log("clck")
+        const selectedId = document.getElementById("extintorSelect").value;
+        if (selectedId) {
+            const url = `/Recarga/RegistrarEstadoExtintor/${selectedId}`;
+            window.location.href = url;
+        }else{
+            alert("Debe seleccionar un extintor")
+        }
+    }
+
+    const btn_ag_prod = document.getElementById("btnAgregarProducto");
+    btn_ag_prod.addEventListener("click", addprod);
+
+    const changeUnit = () => {
+        const precioUnitario = document.getElementById("precioUnitario").value;
+        const subtotalLabel = document.getElementById("subtotalLabel");
+
+        subtotalLabel.innerText = "Total: " + precioUnitario;
+    }
+
+    const inputPrecioUnitario = document.getElementById("precioUnitario");
+    inputPrecioUnitario.addEventListener("change", changeUnit);
+
+</script>

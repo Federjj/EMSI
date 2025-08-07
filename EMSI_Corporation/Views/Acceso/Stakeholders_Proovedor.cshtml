@@ -1,0 +1,222 @@
+﻿@model List<EMSI_Corporation.Models.Proovedor>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<main>
+    <!-- Contenedor para alertas (inicialmente vacío) -->
+    <div id="alert-container" class="" style="z-index: 9999">
+    </div>
+    <div class="seccion d-flex flex-row w-100 gap-4 mb-4">
+        <a class="stakeholder w-50 seccion d-flex flex-row gap-4 align-items-center justify-content-center"
+            asp-controller="Acceso" asp-action="Stakeholders_Cliente">
+            <h1 class="titulo">Clientes</h1>
+        </a>
+        <div class="stakeholder w-50 seccion d-flex flex-row gap-4 align-items-center justify-content-center selected">
+            <h1 class="titulo">Proveedores</h1>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-end mb-3">
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalCrear">Agregar proveedor</button>
+    </div>
+
+    <table class="table table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Razón Social</th>
+                <th>RUC</th>
+                <th>Dirección</th>
+                <th>Teléfono</th>
+                <th>Correo</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var p in Model)
+            {
+                <tr>
+                    <td>@p.IdProovedor</td>
+                    <td>@p.RazonSocial</td>
+                    <td>@p.RUC</td>
+                    <td>@p.Direccion</td>
+                    <td>@p.NumCelular</td>
+                    <td>@p.Correo</td>
+                    <td>@(p.estado ? "Activo" : "Inactivo")</td>
+                    <td>
+                        <button class="btn btn-sm btn-warning" data-bs-toggle="modal"
+                            data-bs-target="#modalEditar-@p.IdProovedor">Editar</button>
+                        <button class="btn btn-sm btn-danger" data-bs-toggle="modal"
+                            data-bs-target="#modalEliminar-@p.IdProovedor">Eliminar</button>
+                    </td>
+                </tr>
+
+                <!-- Modal Editar -->
+                <div class="modal fade" id="modalEditar-@p.IdProovedor" tabindex="-1"
+                    aria-labelledby="modalEditarLabel-@p.IdProovedor" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <form asp-controller="Acceso" asp-action="EditarProovedor" method="post">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Editar proveedor</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="modal-body row g-3">
+                                    <input type="hidden" name="IdProovedor" value="@p.IdProovedor" />
+                                    <div class="col-md-6">
+                                        <label class="form-label">Razón Social</label>
+                                        <input type="text" name="RazonSocial" class="form-control" value="@p.RazonSocial"
+                                            required />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">RUC</label>
+                                        <input type="text" name="RUC" class="form-control" value="@p.RUC" required />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Dirección</label>
+                                        <input type="text" name="Direccion" class="form-control" value="@p.Direccion" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Teléfono</label>
+                                        <input type="text" name="NumCelular" class="form-control" value="@p.NumCelular" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Correo</label>
+                                        <input type="email" name="Correo" class="form-control" value="@p.Correo" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Estado</label>
+                                        <select name="estado" class="form-select">
+                                            <option value="true" selected="@(p.estado ? "selected" : null)">Activo</option>
+                                            <option value="false" selected="@(!p.estado ? "selected" : null)">Inactivo
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-success">Guardar cambios</button>
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Cancelar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal Eliminar -->
+                <div class="modal fade" id="modalEliminar-@p.IdProovedor" tabindex="-1"
+                    aria-labelledby="modalEliminarLabel-@p.IdProovedor" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <form asp-controller="Acceso" asp-action="ConfirmarEliminarProovedor" method="post">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Confirmar eliminación</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <input type="hidden" name="IdProovedor" value="@p.IdProovedor" />
+                                    <p>¿Estás seguro de que deseas eliminar al proveedor <strong>@p.RazonSocial</strong>?
+                                    </p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-danger">Sí, eliminar</button>
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Cancelar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            }
+        </tbody>
+    </table>
+</main>
+@section Scripts {
+    <script>
+        // Mostrar alertas solo si existen en TempData
+        $(function () {
+            @if (TempData["Error"] != null)
+                {
+                    <text>
+                        showAlert('@TempData["Error"]', 'danger');
+                    </text>
+                // Limpiar TempData después de mostrarlo
+                    TempData.Remove("Error");
+                }
+
+                @if (TempData["Success"] != null)
+                {
+                    <text>
+                        showAlert('@TempData["Success"]', 'success');
+                    </text>
+                // Limpiar TempData después de mostrarlo
+                    TempData.Remove("Success");
+                }
+
+                function showAlert(message, type) {
+                    const alert = `
+                                        <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+                                            ${message}
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                        </div>`;
+
+                    $('#alert-container').append(alert);
+
+                    // Auto-ocultar después de 5 segundos
+                    setTimeout(() => {
+                        $('.alert').alert('close');
+                    }, 5000);
+                }
+        });
+    </script>
+}
+
+<!-- Modal Crear -->
+<div class="modal fade" id="modalCrear" tabindex="-1" aria-labelledby="modalCrearLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form asp-controller="Acceso" asp-action="CrearProovedor" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalCrearLabel">Agregar nuevo proveedor</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Razón Social</label>
+                        <input type="text" name="RazonSocial" class="form-control" required />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">RUC</label>
+                        <input type="text" name="RUC" class="form-control" required />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Dirección</label>
+                        <input type="text" name="Direccion" class="form-control" />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Teléfono</label>
+                        <input type="text" name="NumCelular" class="form-control" />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Correo</label>
+                        <input type="email" name="Correo" class="form-control" />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Estado</label>
+                        <select name="estado" class="form-select">
+                            <option value="true">Activo</option>
+                            <option value="false">Inactivo</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Guardar</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,62 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model EMSI_Corporation.ViewModels.VentaVM;
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var clientes = ViewBag.clientes as List<EMSI_Corporation.Models.Cliente>;
+    var empleados = ViewBag.empleados as List<EMSI_Corporation.Models.Empleado>;
+    var extintores = ViewBag.extintores as List<EMSI_Corporation.Models.Extintor>;
+}
+
+<!--public DateTime FechaVenta { get; set; }
+    public string MetodoPago { get; set; }
+    public decimal Total { get; set; }
+
+    public int Cliente_ID { get; set; }
+    public Cliente Cliente { get; set; }
+
+    public int Empleado_ID { get; set; }
+    public Empleado Empleado { get; set; }-->
+<form class="seccion" method="post" asp-controller="Venta" asp-action="Registrar">
+    <div class="form-line">
+        <span>Fecha de venta:</span>
+        <input class="field" placeholder="Fecha de venta" type="date" asp-for="FechaVenta" />
+    </div>
+    <div class="form-line">
+        <span>Método de pago:</span>
+        <input class="field" placeholder="Método de pago" type="text" asp-for="MetodoPago" />
+    </div>
+    <div class="form-line">
+        <span>Pago total:</span>
+        <input class="field" placeholder="Pago total" type="text" asp-for="Total" />
+    </div>
+    <div class="form-line">
+        <span>Cliente:</span>
+        <select class="field" asp-for="Cliente_ID">
+            @foreach (Cliente cliente in clientes)
+            {
+                <option value=@cliente.IdCliente>@cliente.NomCliente</option>
+            }
+        </select>
+    </div>
+    <div class="form-line">
+        <span>Empleado:</span>
+        <select class="field" asp-for="Empleado_ID">
+            @foreach (Empleado empleado in empleados)
+            {
+                <option value=@empleado.IdEmpleado>@empleado.nomEmpleado</option>
+            }
+        </select>
+    </div>
+    <div class="form-line">
+        <span>Extintor:</span>
+        <select class="field" asp-for="Extintor_ID">
+            @foreach (Extintor extintor in extintores)
+            {
+                <option value=@extintor.IdExtintor>@extintor.IdExtintor</option>
+            }
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Registrar</button>
+</form>

@@ -1,0 +1,145 @@
+﻿@model EMSI_Corporation.ViewModels.EventoCalendarioVM
+
+@{
+    ViewData["Title"] = "Editar Evento";
+    var nvo = ViewBag.nvo as EMSI_Corporation.ViewModels.UsuarioEventosVM;
+    var fechaMinima = DateTime.Now.ToString("yyyy-MM-ddTHH:mm");
+    var esAdmin = false;
+}
+
+<h2>Editar Evento</h2>
+@if (nvo.usuario.UserRoles.ToList()[0].IdRol == 1)
+{
+    esAdmin = true;
+}
+
+<form asp-action="Editar" method="post">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="IdEvento" />
+
+    <div class="mb-3">
+        <label asp-for="Titulo" class="form-label"></label>
+
+        <input asp-for="Titulo" class="form-control" disabled=@(!esAdmin) />
+        <span asp-validation-for="Titulo" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Descripcion" class="form-label"></label>
+        <textarea asp-for="Descripcion" class="form-control" disabled=@(!esAdmin)></textarea>
+        <span asp-validation-for="Descripcion" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="FechaInicio" class="form-label"></label>
+        <input asp-for="FechaInicio"
+               type="datetime-local"
+               class="form-control"
+               min="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")"
+               value="@Model.FechaInicio.ToString("yyyy-MM-ddTHH:mm")" disabled=@(!esAdmin) />
+
+        <span asp-validation-for="FechaInicio" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="FechaFin" class="form-label"></label>
+        <input asp-for="FechaFin"
+               type="datetime-local"
+               class="form-control"
+               min="@Model.FechaInicio.ToString("yyyy-MM-ddTHH:mm")"
+               value="@(Model.FechaFin.HasValue ? Model.FechaFin.Value.ToString("yyyy-MM-ddTHH:mm") : "")" disabled=@(!esAdmin) />
+
+        <span asp-validation-for="FechaFin" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Color" class="form-label"></label>
+        <select asp-for="Color" class="form-control" disabled=@(!esAdmin)>
+            <option value="#007bff">Azul</option>
+            <option value="#28a745">Verde</option>
+            <option value="#dc3545">Rojo</option>
+            <option value="#ffc107">Amarillo</option>
+            <option value="#6f42c1">Morado</option>
+            <option value="#20c997">Turquesa</option>
+            <option value="#fd7e14">Naranja</option>
+        </select>
+        <span asp-validation-for="Color" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary" disabled=@(!esAdmin)>Actualizar</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalEliminar" disabled=@(!esAdmin)>
+        Eliminar
+    </button>
+</form>
+<!-- Modal de confirmación de eliminación -->
+<div class="modal fade" id="modalEliminar" tabindex="-1" aria-labelledby="modalEliminarLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form asp-action="ConfirmarEliminar" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="id" value="@Model.IdEvento" />
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title" id="modalEliminarLabel">¿Eliminar Evento?</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    ¿Estás seguro de que deseas eliminar el evento <strong>@Model.Titulo</strong>?
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-danger">Sí, eliminar</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.querySelector('form').addEventListener('submit', function (e) {
+        const fechaInicioInput = document.querySelector('#FechaInicio');
+        const fechaFinInput = document.querySelector('#FechaFin');
+
+        const fechaInicio = new Date(fechaInicioInput.value);
+        const fechaFin = new Date(fechaFinInput.value);
+        const ahora = new Date();
+        ahora.setSeconds(0, 0); // limpiar segundos
+
+        let errores = [];
+
+        // Solo validar contra ahora si el usuario cambió la fecha de inicio
+        if (!isNaN(fechaInicio) && fechaInicioInput.value && fechaInicio < ahora) {
+            errores.push("La fecha de inicio debe ser igual o posterior al momento actual.");
+        }
+
+        if (!isNaN(fechaFin) && fechaFinInput.value && fechaFin < fechaInicio) {
+            errores.push("La fecha de fin no puede ser anterior a la fecha de inicio.");
+        }
+
+        if (errores.length > 0) {
+            e.preventDefault();
+            alert(errores.join('\n'));
+        }
+    });
+</script>
+<script>
+    flatpickr("#FechaInicio", {
+        enableTime: true,
+        dateFormat: "Y-m-d H:i",
+        time_24hr: true,
+        locale: "es",
+        minDate: "today"
+    });
+
+    flatpickr("#FechaFin", {
+        enableTime: true,
+        dateFormat: "Y-m-d H:i",
+        time_24hr: true,
+        locale: "es",
+        minDate: "today"
+    });
+</script>
+
+
+
+

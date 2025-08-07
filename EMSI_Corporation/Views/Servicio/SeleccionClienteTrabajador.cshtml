@@ -1,0 +1,51 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var clientes = ViewBag.Clientes as List<EMSI_Corporation.Models.Cliente>;
+    var trabajadores = ViewBag.Trabajadores as List<EMSI_Corporation.Models.Empleado>;
+}
+@model EMSI_Corporation.ViewModels.ClienteTrabajadorVM;
+
+
+    <div class="seccion">
+        <form class="modal-content" asp-controller="Servicio" asp-action="SeleccionCLienteTrabajador" method="post">
+            <div class="modal-header">
+                <h1 class="titulo">Cliente / Trabajador</h1>
+            </div>
+            <div class="modal-body d-flex flex-column gap-4">
+
+                <div class="form-line">
+                    <span>Empresa:</span>
+                    <select class="field" asp-for="clienteID">
+                        @foreach (var cliente in clientes)
+                        {
+                            <option value=@cliente.IdCliente>@cliente.NomCliente</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-line">
+                    <span>Trabajador:</span>
+                    <select class="field" asp-for="empleadoID">
+                        @foreach (var trabajador in trabajadores)
+                        {
+                            <option value=@trabajador.IdEmpleado>@trabajador.nomEmpleado</option>
+                        }
+                    </select>
+                </div>
+            <div class="form-line">
+                <span>Tipo de servicio:</span>
+                <select class="field" asp-for="TipoServicio">
+                    <option value="Mantenimiento">Mantenimiento</option>
+                    <option value="Recarga">Recarga</option>
+                </select>
+            </div>
+            </div>
+            <div class="modal-footer d-flex flex-row justify-content-center">
+                <button id="continue-btn" type="submit" class="btn-1">Ir a registrar</button>
+            </div>
+        </form>
+    </div>

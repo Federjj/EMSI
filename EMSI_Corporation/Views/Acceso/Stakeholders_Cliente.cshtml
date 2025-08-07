@@ -1,0 +1,227 @@
+﻿@model List<EMSI_Corporation.Models.Cliente>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<main>
+    <!-- Contenedor para alertas (inicialmente vacío) -->
+    <div id="alert-container" class="" style="z-index: 9999">
+    </div>
+    <div class="seccion d-flex flex-row w-100 gap-4 mb-4">
+        <div class="stakeholder w-50 seccion d-flex flex-row gap-4 align-items-center justify-content-center selected">
+            <h1 class="titulo">Clientes</h1>
+        </div>
+        <a class="stakeholder w-50 seccion d-flex flex-row gap-4 align-items-center justify-content-center"
+            asp-controller="Acceso" asp-action="Stakeholders_Proovedor">
+            <h1 class="titulo">Proveedores</h1>
+        </a>
+    </div>
+
+    <div class="d-flex justify-content-end mb-3">
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalCrear">Agregar cliente</button>
+    </div>
+
+    <table class="table table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Tipo</th>
+                <th>Documento</th>
+                <th>Teléfono</th>
+                <th>Correo</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var c in Model)
+            {
+                <tr>
+                    <td>@c.IdCliente</td>
+                    <td>@c.NomCliente</td>
+                    <td>@c.TipoCliente</td>
+                    <td>@c.TipoDocumento - @c.NumDocumento</td>
+                    <td>@c.NumCelular</td>
+                    <td>@c.Correo</td>
+                    <td>
+                        <button class="btn btn-sm btn-warning" data-bs-toggle="modal"
+                            data-bs-target="#modalEditar-@c.IdCliente">Editar</button>
+                        <button class="btn btn-sm btn-danger" data-bs-toggle="modal"
+                            data-bs-target="#modalEliminar-@c.IdCliente">Eliminar</button>
+                    </td>
+                </tr>
+
+                <!-- Modal Editar -->
+                <div class="modal fade" id="modalEditar-@c.IdCliente" tabindex="-1">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <form asp-action="EditarCliente" method="post">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Editar cliente</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="modal-body row g-3">
+                                    <input type="hidden" name="IdCliente" value="@c.IdCliente" />
+                                    <div class="col-md-6">
+                                        <label>Nombre</label>
+                                        <input name="NomCliente" value="@c.NomCliente" class="form-control" required />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>Tipo</label>
+                                        <select name="TipoCliente" class="form-select" required>
+                                            <option value="Persona Natural"
+                                                selected="@(c.TipoCliente == "Persona Natural")">Persona Natural</option>
+                                            <option value="Empresa" selected="@(c.TipoCliente == "Empresa")">Empresa
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>Tipo de documento</label>
+                                        <select name="TipoDocumento" class="form-select" required>
+                                            <option value="DNI" selected="@(c.TipoDocumento == "DNI")">DNI</option>
+                                            <option value="RUC" selected="@(c.TipoDocumento == "RUC")">RUC</option>
+                                            <option value="CARNET DE EXTRANJERIA"
+                                                selected="@(c.TipoDocumento == "CARNET DE EXTRANJERIA")">CARNET DE
+                                                EXTRANJERIA</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>N° Documento</label>
+                                        <input name="NumDocumento" value="@c.NumDocumento" class="form-control" required />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>Teléfono</label>
+                                        <input name="NumCelular" value="@c.NumCelular" class="form-control" maxlength="9"
+                                            pattern="\d{9}" required />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>Correo</label>
+                                        <input name="Correo" type="email" value="@c.Correo" class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-success">Guardar</button>
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Cancelar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal Eliminar -->
+                <div class="modal fade" id="modalEliminar-@c.IdCliente" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <form asp-action="ConfirmarEliminarCliente" method="post">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Eliminar cliente</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <input type="hidden" name="IdCliente" value="@c.IdCliente" />
+                                    ¿Deseas eliminar al cliente <strong>@c.NomCliente</strong>?
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-danger">Sí, eliminar</button>
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Cancelar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            }
+        </tbody>
+    </table>
+</main>
+@section Scripts {
+    <script>
+        // Mostrar alertas solo si existen en TempData
+        $(function () {
+            @if (TempData["Error"] != null)
+                {
+                    <text>
+                        showAlert('@TempData["Error"]', 'danger');
+                    </text>
+                // Limpiar TempData después de mostrarlo
+                    TempData.Remove("Error");
+                }
+
+                @if (TempData["Success"] != null)
+                {
+                    <text>
+                        showAlert('@TempData["Success"]', 'success');
+                    </text>
+                // Limpiar TempData después de mostrarlo
+                    TempData.Remove("Success");
+                }
+
+                function showAlert(message, type) {
+                    const alert = `
+                            <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+                                ${message}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>`;
+
+                    $('#alert-container').append(alert);
+
+                    // Auto-ocultar después de 5 segundos
+                    setTimeout(() => {
+                        $('.alert').alert('close');
+                    }, 5000);
+                }
+        });
+    </script>
+}
+<!-- Modal Crear -->
+<div class="modal fade" id="modalCrear" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form asp-action="CrearCliente" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title">Agregar cliente</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body row g-3">
+                    <div class="col-md-6">
+                        <label>Nombre</label>
+                        <input name="NomCliente" class="form-control" required />
+                    </div>
+                    <div class="col-md-6">
+                        <label>Tipo</label>
+                        <select name="TipoCliente" class="form-select" required>
+                            <option value="Persona Natural">Persona Natural</option>
+                            <option value="Empresa">Empresa</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label>Tipo de documento</label>
+                        <select name="TipoDocumento" class="form-select" required>
+                            <option value="DNI">DNI</option>
+                            <option value="RUC">RUC</option>
+                            <option value="CARNET DE EXTRANJERIA">CARNET DE EXTRANJERIA</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label>N° Documento</label>
+                        <input name="NumDocumento" class="form-control" required />
+                    </div>
+                    <div class="col-md-6">
+                        <label>Teléfono</label>
+                        <input name="NumCelular" class="form-control" maxlength="9" pattern="\d{9}" required />
+                    </div>
+                    <div class="col-md-6">
+                        <label>Correo</label>
+                        <input name="Correo" type="email" class="form-control" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Guardar</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

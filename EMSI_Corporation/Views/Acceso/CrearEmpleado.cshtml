@@ -1,0 +1,90 @@
+﻿@model EMSI_Corporation.ViewModels.EmpleadoRegistroVM
+@{
+    ViewData["Title"] = "Registrar Empleado";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var roles = ViewBag.Roles as List<EMSI_Corporation.Models.Rol>;
+}
+
+<!-- ✅ MENSAJE DE ÉXITO -->
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["Success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<h2 class="mb-4">Registrar Nuevo Empleado</h2>
+
+<form asp-action="CrearEmpleado" method="post" class="row g-3">
+    <!-- ✅ Mostrará solo errores del ModelState, sin duplicados -->
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="col-md-6">
+        <label class="form-label">Nombre</label>
+        <input asp-for="NomEmpleado" class="form-control" required />
+        <span asp-validation-for="NomEmpleado" class="text-danger"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label class="form-label">Apellido</label>
+        <input asp-for="ApeEmpleado" class="form-control" required />
+        <span asp-validation-for="ApeEmpleado" class="text-danger"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label class="form-label">DNI</label>
+        <input asp-for="DNI" class="form-control" required />
+        <span asp-validation-for="DNI" class="text-danger"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label class="form-label">Correo</label>
+        <input asp-for="Gmail" type="email" class="form-control" required />
+        <span asp-validation-for="Gmail" class="text-danger"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label class="form-label">Celular</label>
+        <input asp-for="NumCelular" class="form-control" required />
+        <span asp-validation-for="NumCelular" class="text-danger"></span>
+    </div>
+
+    <hr class="mt-4" />
+
+    <div class="col-md-6">
+        <label class="form-label">Usuario</label>
+        <input asp-for="Usuario" class="form-control" required />
+        <span asp-validation-for="Usuario" class="text-danger"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label class="form-label">Contraseña</label>
+        <input asp-for="Password" type="password" class="form-control" required />
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label class="form-label">Rol de Empleado</label>
+        <select asp-for="IdRol" class="form-control" required>
+            <option value="">-- Seleccionar rol --</option>
+            @if (roles != null)
+            {
+                foreach (var rol in roles)
+                {
+                    <option value="@rol.IdRol">@rol.nomRol</option>
+                }
+            }
+        </select>
+        <span asp-validation-for="IdRol" class="text-danger"></span>
+    </div>
+
+    <div class="col-12 mt-4">
+        <button type="submit" class="btn btn-success">Registrar Empleado</button>
+        <!-- ✅ Botón de regreso -->
+        <a asp-action="Stakeholders_Empleado" class="btn btn-secondary ms-2">Regresar</a>
+    </div>
+</form>
+
+<!-- ✅ Scripts de validación -->
+<partial name="_ValidationScriptsPartial" />

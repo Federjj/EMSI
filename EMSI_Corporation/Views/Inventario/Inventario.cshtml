@@ -1,0 +1,92 @@
+﻿@model List<EMSI_Corporation.Models.Extintor>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-lg">
+        <div class="card-header text-white" style="background: linear-gradient(90deg, #dc3545, #8b0000);">
+            <a class="btn btn-sm btn-warning" asp-controller="Servicio" asp-action="SeleccionClienteTrabajador">
+                Registrar servicio
+            </a>
+            <a class="btn btn-sm btn-warning" asp-controller="Mantenimiento" asp-action="Index">
+                Ver mantenimientos
+            </a>
+            <a class="btn btn-sm btn-warning" asp-controller="Recarga" asp-action="Index">
+                Ver recargas
+            </a>
+            <h3 class="mb-0">Inventario de Extintores</h3>
+        </div>
+        <div class="card-body">
+            @if (Model != null && Model.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover table-bordered align-middle">
+                        <thead class="table-dark text-center">
+                            <tr>
+                                <th>ID</th>
+                                <th>Tipo de Agente</th>
+                                <th>Clase de Fuego</th>
+                                <th>Capacidad (KG)</th>
+                                <th>Cantidad Disponible</th>
+                                <th>Fecha de Vencimiento</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var ext in Model)
+                            {
+                                <tr class="text-center">
+                                    <td>@ext.IdExtintor</td>
+                                    <td>@ext.TipoAgente</td>
+                                    <td>@ext.ClaseFuego</td>
+                                    <td>@ext.CapacidadKG</td>
+                                    <td>
+                                        <span class="fw-bold text-primary">@ext.CantidadDisponible</span>
+                                    </td>
+                                    <td>@ext.FechaVencimiento.ToString("yyyy-MM-dd")</td>
+                                    <td>
+                                        @if (ext.Estado == "Operativo")
+                                        {
+                                            <span class="badge bg-success">Operativo</span>
+                                        }
+                                        else if (ext.Estado == "Inoperativo")
+                                        {
+                                            <span class="badge bg-danger">Inoperativo</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-secondary">@ext.Estado</span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Botones de PDF -->
+                <div class="mt-4 text-end">
+                    <a href="@Url.Action("VerPDF", "Inventario")" target="_blank" class="btn btn-outline-primary me-2">
+                        <i class="bi bi-eye"></i> Ver PDF
+                    </a>
+                    <a href="@Url.Action("DescargarPDF", "Inventario")" class="btn btn-outline-success">
+                        <i class="bi bi-download"></i> Descargar PDF
+                    </a>
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-warning text-center" role="alert">
+                    No hay extintores registrados en el inventario.
+                </div>
+                <div class="text-center mt-3">
+                    <a asp-controller="Recepcion" asp-action="Index" class="btn btn-outline-danger">
+                        Registrar Recepción
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+</div>

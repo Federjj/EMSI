@@ -1,0 +1,53 @@
+﻿@model EMSI_Corporation.Models.Usuario
+@{
+    ViewData["Title"] = "Mi Perfil";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4 text-dark">Mi Perfil</h2>
+    <hr />
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h5 class="card-title text-primary">Datos del Usuario</h5>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label class="form-label">Nombre de Usuario</label>
+                    <input class="form-control" value="@Model.usuario" readonly />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Rol Asignado</label>
+                    <input class="form-control" value="@ViewBag.Rol" readonly />
+                </div>
+            </div>
+
+            @if (Model.empleado != null)
+            {
+                <h5 class="card-title text-primary mt-4">Datos Personales</h5>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Nombre</label>
+                        <input class="form-control" value="@Model.empleado.nomEmpleado" readonly />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Apellido</label>
+                        <input class="form-control" value="@Model.empleado.apeEmpleado" readonly />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">DNI</label>
+                        <input class="form-control" value="@Model.empleado.dni" readonly />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Correo</label>
+                        <input class="form-control" value="@Model.empleado.gmail" readonly />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Celular</label>
+                        <input class="form-control" value="@Model.empleado.numCelular" readonly />
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

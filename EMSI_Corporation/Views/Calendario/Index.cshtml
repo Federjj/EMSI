@@ -1,0 +1,65 @@
+﻿@model EMSI_Corporation.ViewModels.UsuarioEventosVM;
+
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+
+        <h2>Calendario</h2>
+        @if (Model.usuario.UserRoles.ElementAt(0).IdRol == 1)
+        {
+            <a class="btn btn-success" asp-action="Crear">Crear Evento</a>
+        }
+    </div>
+
+    <div class="alert alert-info">
+        Haz click en un evento para editarlo.
+    </div>
+
+    <div id="calendar"></div>
+</div>
+<!-- Modal de Confirmación de Eliminación -->
+<div class="modal fade" id="modalEliminar" tabindex="-1" aria-labelledby="modalEliminarLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form asp-action="ConfirmarEliminar" method="post">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title" id="modalEliminarLabel">Eliminar Evento</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    ¿Estás seguro de eliminar el evento <strong id="nombreEvento"></strong>?
+                    <input type="hidden" name="id" id="eventoIdEliminar" />
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-danger">Sí, eliminar</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const calendarEl = document.getElementById('calendar');
+
+            if (calendarEl) {
+                const calendar = new FullCalendar.Calendar(calendarEl, {
+                    initialView: 'dayGridMonth',
+                    locale: 'es',
+                    height: 'auto',
+                    events: '/Calendario/ObtenerEventos',
+                    eventClick: function (info) {
+                        const eventoId = info.event.id;
+                        if (eventoId) {
+                            window.location.href = `/Calendario/Editar/${eventoId}`;
+                        }
+                    }
+                });
+
+                calendar.render();
+            }
+        });
+    </script>
+}

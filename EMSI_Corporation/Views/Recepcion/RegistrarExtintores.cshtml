@@ -1,0 +1,106 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int recepcionId = ViewBag.RecepcionId;
+    var extintores = ViewBag.Extintores as List<EMSI_Corporation.Models.Extintor>;
+}
+
+<div class="container mt-5">
+    <div class="card shadow-lg">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Registrar Extintor</h4>
+        </div>
+        <div class="card-body">
+            <form asp-action="GuardarExtintor" method="post">
+                <input type="hidden" name="RecepcionId" value="@recepcionId" />
+
+                <div class="mb-3">
+                    <label class="form-label">Tipo de Agente</label>
+                    <select name="TipoAgente" class="form-select" required>
+                        <option value="">-- Seleccione --</option>
+                        <option value="A">A</option>
+                        <option value="B">B</option>
+                        <option value="C">C</option>
+                        <option value="D">D</option>
+                        <option value="K">K</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Clase de Fuego</label>
+                    <select name="ClaseFuego" class="form-select" required>
+                        <option value="">-- Seleccione --</option>
+                        <option value="A">A</option>
+                        <option value="B">B</option>
+                        <option value="C">C</option>
+                        <option value="D">D</option>
+                        <option value="K">K</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Capacidad (KG)</label>
+                    <input type="number" step="0.01" name="CapacidadKG" class="form-control" required />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Fecha de Vencimiento</label>
+                    <input type="date" name="FechaVencimiento" class="form-control" required />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Estado</label>
+                    <select name="Estado" class="form-select" required>
+                        <option value="">-- Seleccione Estado --</option>
+                        <option value="Operativo">Operativo</option>
+                        <option value="Inoperativo">Inoperativo</option>
+                    </select>
+                </div>
+
+                <div class="text-end">
+                    <button type="submit" class="btn btn-success">Guardar Extintor</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    @if (extintores != null && extintores.Any())
+    {
+        <div class="card mt-4">
+            <div class="card-header bg-secondary text-white">
+                <h5 class="mb-0">Extintores registrados</h5>
+            </div>
+            <div class="card-body p-0">
+                <table class="table table-striped mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>ID</th>
+                            <th>Tipo de Agente</th>
+                            <th>Clase de Fuego</th>
+                            <th>Capacidad (KG)</th>
+                            <th>Fecha Vencimiento</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var ext in extintores)
+                        {
+                            <tr>
+                                <td>@ext.IdExtintor</td>
+                                <td>@ext.TipoAgente</td>
+                                <td>@ext.ClaseFuego</td>
+                                <td>@ext.CapacidadKG</td>
+                                <td>@ext.FechaVencimiento.ToString("yyyy-MM-dd")</td>
+                                <td>@ext.Estado</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+
+    <!-- Botón para finalizar (opcional) -->
+    @*<div class="mt-4 text-end">
+        <a asp-action="Index" asp-controller="Recepcion" class="btn btn-outline-primary">Finalizar Recepción</a>
+    </div>*@
+</div>

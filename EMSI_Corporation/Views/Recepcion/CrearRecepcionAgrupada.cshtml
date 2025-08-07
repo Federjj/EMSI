@@ -1,0 +1,109 @@
+﻿@model List<EMSI_Corporation.ViewModels.RecepcionVM>
+
+@{
+    ViewData["Title"] = "Recepción Agrupada de Extintores";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2 class="text-center mt-4">Recepción Agrupada de Extintores</h2>
+
+<form asp-action="RecepcionarAgrupado" method="post">
+    <div class="container mt-4">
+        <div id="extintores-container">
+            <div class="row g-3 mb-3 extintor-item">
+                <div class="col-md-3">
+                    <label class="form-label">Tipo de Agente</label>
+                    <select name="listaRecepcion[0].TipoAgente" class="form-select tipo-agente" required>
+                        <option value="">-- Seleccione --</option>
+                        <option value="A">Clase A - Sólidos</option>
+                        <option value="B">Clase B - Líquidos inflamables</option>
+                        <option value="C">Clase C - Gases inflamables</option>
+                        <option value="D">Clase D - Metales combustibles</option>
+                        <option value="K">Clase K - Grasas y aceites</option>
+                    </select>
+                </div>
+
+                <div class="col-md-2">
+                    <label class="form-label">Clase de Fuego</label>
+                    <input type="text" name="listaRecepcion[0].ClaseFuego" class="form-control clase-fuego" readonly />
+                </div>
+
+                <div class="col-md-2">
+                    <label class="form-label">Capacidad (KG)</label>
+                    <input type="number" name="listaRecepcion[0].CapacidadKG" step="0.1" class="form-control" required />
+                </div>
+
+                <div class="col-md-2">
+                    <label class="form-label">Cantidad</label>
+                    <input type="number" name="listaRecepcion[0].Cantidad" class="form-control" required />
+                </div>
+
+                <div class="col-md-2">
+                    <label class="form-label">Fecha Vencimiento</label>
+                    <input type="date" name="listaRecepcion[0].FechaVencimiento" class="form-control" required />
+                </div>
+
+                <div class="col-md-1 d-flex align-items-end">
+                    <button type="button" class="btn btn-danger btn-remove">✖</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-end mt-3">
+            <button type="button" class="btn btn-secondary" id="btn-add">+ Agregar Otro</button>
+        </div>
+
+        <div class="text-center mt-4">
+            <button type="submit" class="btn btn-success">Registrar Recepción</button>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    <script>
+        let index = 1;
+
+        function actualizarClaseFuego(item) {
+            const tipoAgente = item.querySelector(".tipo-agente");
+            const claseFuego = item.querySelector(".clase-fuego");
+
+            tipoAgente.addEventListener("change", function () {
+                claseFuego.value = tipoAgente.value;
+            });
+        }
+
+        // Inicializar el primer item
+        actualizarClaseFuego(document.querySelector(".extintor-item"));
+
+        // Agregar nuevo item
+        document.getElementById("btn-add").addEventListener("click", function () {
+            const container = document.getElementById("extintores-container");
+            const original = document.querySelector(".extintor-item");
+            const clone = original.cloneNode(true);
+
+            // Limpiar campos y actualizar índices
+            clone.querySelectorAll("input, select").forEach(input => {
+                const name = input.getAttribute("name");
+                if (name) {
+                    const newName = name.replace(/\[\d+\]/, `[${index}]`);
+                    input.setAttribute("name", newName);
+                    input.value = "";
+                }
+            });
+
+            container.appendChild(clone);
+            actualizarClaseFuego(clone);
+            index++;
+        });
+
+        // Eliminar item
+        document.addEventListener("click", function (e) {
+            if (e.target && e.target.classList.contains("btn-remove")) {
+                const items = document.querySelectorAll(".extintor-item");
+                if (items.length > 1) {
+                    e.target.closest(".extintor-item").remove();
+                }
+            }
+        });
+    </script>
+}

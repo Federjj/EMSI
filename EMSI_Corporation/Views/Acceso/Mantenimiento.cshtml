@@ -1,0 +1,351 @@
+﻿@model EMSI_Corporation.ViewModels.ClienteTrabajadorVM;
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<main>
+    <form method="get" action="/Acceso/DescargarExcel">
+        <button type="submit" class="btn btn-primary">Descargar Excel</button>
+    </form>
+    <section class="mantenimiento">
+        <button id="boton-excel">down</button>
+        <div class="seccion sec-mant-servicio">
+            <h1 class="titulo">Servicio</h1>
+            <div class="form-line">
+                <span>Empresa:</span>
+                <span>@Model.cliente.NomCliente</span>
+            </div>
+            <div class="form-line">
+                <span>Fecha:</span>
+                <input type="date" class="field">
+            </div>
+            <div class="form-line">
+                <span>Tipo de servicio:</span>
+                <input type="text" class="field">
+            </div>
+            <div class="form-line">
+                <span>Hora inicio:</span>
+                <input type="time" class="field">
+            </div>
+            <div class="form-line">
+                <span>Hora fin:</span>
+                <input type="time" class="field">
+            </div>
+            <h3 class="titulo">Productos</h3>
+            <button type="button" class="btn-1" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                Agregar producto
+            </button>
+
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <form class="modal-content" asp-controller="Acceso" asp-action="UploadNewProd" method="post">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Agregar un producto</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body d-flex flex-column gap-3">
+                            <div class="form-line">
+                                <span>Código:</span>
+                                <input type="text" class="field">
+                            </div>
+                            <h1 class="titulo">Localización</h1>
+                            <div class="form-line">
+                                <span>Lugar adecuado:</span>
+                                <select class="field" name="yesno" id="yesno">
+                                    <option value="si">si</option>
+                                    <option value="no">no</option>
+                                </select>
+                            </div>
+                            <div class="form-line">
+                                <span>Señalizado:</span>
+                                <select class="field" name="yesno" id="yesno">
+                                    <option value="si">si</option>
+                                    <option value="no">no</option>
+                                </select>
+                            </div>
+                            <div class="form-line">
+                                <span>Visibilidad:</span>
+                                <select class="field" name="yesno" id="yesno">
+                                    <option value="si">si</option>
+                                    <option value="no">no</option>
+                                </select>
+                            </div>
+
+
+                            <h1 class="titulo">Seguridad</h1>
+                            <div class="form-line">
+                                <span>Usado en el último año:</span>
+                                <select class="field" name="yesno" id="yesno">
+                                    <option value="si">si</option>
+                                    <option value="no">no</option>
+                                </select>
+                            </div>
+                            <div class="form-line">
+                                <span>Estado del precinto:</span>
+                                <select class="field" name="yesno" id="yesno">
+                                    <option value="si">si</option>
+                                    <option value="no">no</option>
+                                </select>
+                            </div>
+                            <div class="form-line">
+                                <span>Estado del indicador:</span>
+                                <select class="field" name="yesno" id="yesno">
+                                    <option value="si">si</option>
+                                    <option value="no">no</option>
+                                </select>
+                            </div>
+                            <div class="form-line">
+                                <span>Presión correcta:</span>
+                                <select class="field" name="yesno" id="yesno">
+                                    <option value="si">si</option>
+                                    <option value="no">no</option>
+                                </select>
+                            </div>
+                            <div class="form-line">
+                                <span>Exterior correcto:</span>
+                                <select class="field" name="yesno" id="yesno">
+                                    <option value="si">si</option>
+                                    <option value="no">no</option>
+                                </select>
+                            </div>
+
+                            <div class="form-line">
+                                <span>Peso correcto:</span>
+                                <select class="field" name="yesno" id="yesno">
+                                    <option value="si">si</option>
+                                    <option value="no">no</option>
+                                </select>
+                            </div>
+                            <div class="form-line">
+                                <span>Manguera correcta:</span>
+                                <select class="field" name="yesno" id="yesno">
+                                    <option value="si">si</option>
+                                    <option value="no">no</option>
+                                </select>
+                            </div>
+                            <div class="form-line">
+                                <span>Boquilla correcta:</span>
+                                <select class="field" name="yesno" id="yesno">
+                                    <option value="si">si</option>
+                                    <option value="no">no</option>
+                                </select>
+                            </div>
+                            <div class="form-line">
+                                <span>Instrucciones visibles:</span>
+                                <select class="field" name="yesno" id="yesno">
+                                    <option value="si">si</option>
+                                    <option value="no">no</option>
+                                </select>
+                            </div>
+                            <div class="form-line">
+                                <span>Apertura:</span>
+                                <select class="field" name="yesno" id="yesno">
+                                    <option value="si">si</option>
+                                    <option value="no">no</option>
+                                </select>
+                            </div>
+                            <div class="form-line">
+                                <span>Banometros:</span>
+                                <select class="field" name="yesno" id="yesno">
+                                    <option value="si">si</option>
+                                    <option value="no">no</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button id="add-prod-btn" type="button" class="btn btn-primary">Agregar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Código</th>
+                        <th scope="col">Estado</th>
+                        <th scope="col">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row">1</th>
+                        <td>84652</td>
+                        <td>Perfecto</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">2</th>
+                        <td>4521</td>
+                        <td>Dañado</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">3</th>
+                        <td>55568</td>
+                        <td>Perfecto</td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="seccion sec-mant-datos">
+            <h1 class="titulo">DATOS IMPORTANTES</h1>
+            
+            </div>
+        <div class="seccion sec-mant-observaciones">
+            <h1 class="titulo">OBSERVACIONES</h1>
+            <div class="form-line">
+                <textarea name="" id="" cols="30" rows="10" class="field"></textarea>
+            </div>
+
+            <h1 class="titulo">FOTOS</h1>
+            <p>Adjuntar imágenes</p>
+            <input type="text" class="field">
+
+            <h1 class="titulo">FIRMA</h1>
+            <p>Firma cliente</p>
+            <canvas id="myCanvas" width="200" height="100" style="border:1px solid black;"></canvas>
+            <div class="canvas-btns">
+                <button id="canvas-clear" class="">del</button>
+                <button id="canvas-save" class="">save</button>
+            </div>
+
+            <button class="btn-1">Añadir</button>
+        </div>
+        <div class="seccion sec-mant-excel">
+            <h1 class="titulo">EXCEL</h1>
+        </div>
+    </section>
+</main>
+
+<script>
+    const canvas = document.getElementById("myCanvas");
+    const canvas_clear_btn = document.getElementById("canvas-clear");
+    const canvas_save_btn = document.getElementById("canvas-save");
+    const ctx = canvas.getContext("2d");
+    ctx.lineWidth = 3;
+    ctx.lineCap = 'round';
+    ctx.strokeStyle = 'black';
+    let isDrawing = false;
+
+    function startPosition(e) {
+        console.log("first")
+        isDrawing = true;
+        ctx.beginPath();
+    }
+    function endPosition(e) {
+        isDrawing = false;
+    }
+
+    const drawing = (e) => {
+        if (!isDrawing) return;
+        ctx.lineTo(e.offsetX, e.offsetY);
+        ctx.stroke();
+    }
+
+    const clear = () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+    const fillBG = () => {
+        ctx.fillStyle = "#fff";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "#000";
+    }
+    //tutorial imgs:
+    //https://www.youtube.com/watch?v=HEWxvpHVwKw
+    const saveIMG = () => {
+        const link = document.createElement("a")
+        link.download = "firma.jpg";
+        link.href = canvas.toDataURL();
+        link.click();
+    }
+
+    window.addEventListener("load", () => {
+        canvas.height = canvas.offsetHeight;
+        canvas.width = canvas.offsetWidth;
+        fillBG();
+    })
+    canvas.addEventListener("mousedown", startPosition);
+    canvas.addEventListener("mouseup", endPosition);
+    canvas.addEventListener("mousemove", drawing);
+
+    canvas_clear_btn.addEventListener("click", fillBG);
+    canvas_save_btn.addEventListener("click", saveIMG);
+
+    const addProdBTN = document.querySelector("#add-prod-btn");
+
+    const addProd = () => {
+
+    }
+
+    addProdBTN.addEventListener("click", addProd)
+
+    const excelBTN = document.querySelector("#boton-excel");
+    excelBTN.addEventListener("click", () => {
+        fetch("@Url.Action("DownExcel")", {
+            method: "GET",
+            responseType: 'blob'
+        }).then(data => {
+            console.log(data);
+            saveExcel(data) 
+        })
+    })
+
+    const saveExcel = (response) => {
+        var headers = response.headers;
+        var blob = new Blob([response.data],
+            { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' },
+        );
+
+        window.open(window.URL.createObjectURL(blob));
+    }
+
+    /*
+        canvas.width = 200;
+        canvas.height = 100;
+
+        function startPosition(e) {
+          console.log("first")
+          isDrawing = true;
+          draw(e);
+        }
+
+        //end drawing
+        function endPosition() {
+          console.log("end")
+
+          isDrawing = false;
+          ctx.beginPath();
+        }
+
+        //Function to draw on the Canvas
+        function draw(e) {
+          if (!isDrawing) return;
+            //Select the brush size
+          ctx.lineTo(
+            e.clientX - canvas.offsetLeft,
+            e.clientY - canvas.offsetTop
+          );
+          ctx.stroke();
+          ctx.beginPath();
+          ctx.moveTo(
+            e.clientX - canvas.offsetLeft,
+            e.clientY - canvas.offsetTop
+          );
+        }
+
+        //event listener for differnt mouse actions
+        canvas
+          .addEventListener('mousedown', startPosition);
+        canvas
+          .addEventListener('mouseup', endPosition);
+        canvas
+          .addEventListener('mousemove', draw);
+        */
+
+       
+</script>

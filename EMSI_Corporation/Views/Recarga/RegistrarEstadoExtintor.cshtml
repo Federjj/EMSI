@@ -1,0 +1,41 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model EMSI_Corporation.ViewModels.ServicioRecargaVM;
+
+@{
+    var extintor = ViewBag.extintor as EMSI_Corporation.Models.Extintor;
+    var venta = ViewBag.venta as EMSI_Corporation.Models.Venta;
+    var empleado = ViewBag.empleado as EMSI_Corporation.Models.Empleado;
+}
+<div class="seccion">
+    <h1>Agregando Detalles del extintor..</h1>
+    <form class="modal-content" asp-controller="Recarga" asp-action="RegistrarEstadoExtintor" method="post">
+        <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Agregar un producto</h1>
+            <a type="button" class="btn btn-close" asp-controller="Recarga" asp-action="Registrar" asp-route-id=@extintor.IdExtintor></a>
+        </div>
+        <div class="modal-body d-flex flex-column gap-3">
+            <h1 class="titulo">Localización</h1>
+            <input hidden value=@extintor.IdExtintor asp-for="Extintor_ID" />
+            <input hidden value=@empleado.IdEmpleado asp-for="Empleado_ID" />
+            <div class="form-line">
+                <span>Material usado:</span>
+                <input class="field" type="text" asp-for="MaterialUsado" id="yesno" />
+            </div>
+            <div class="form-line">
+                <span>Cantidad KG:</span>
+                <input class="field" type="text" asp-for="CantidadKG" id="yesno" />
+            </div>
+            <div class="form-line">
+                <span>Presión post recarga:</span>
+                <input class="field" type="text" asp-for="PresionPostRecarga" id="yesno" />
+            </div>
+
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" asp-controller="Recarga" asp-action="Registrar" asp-route-id=@extintor.IdExtintor>Cancelar</button>
+            <button id="add-prod-btn" type="submit" class="btn btn-primary">Agregar</button>
+        </div>
+    </form>
+</div>

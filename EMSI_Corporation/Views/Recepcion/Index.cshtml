@@ -1,0 +1,40 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="card shadow border-0">
+        <div class="card-header text-white" style="background-color: #BC1C34;">
+            <h4 class="mb-0">Registrar Recepción</h4>
+        </div>
+
+        <div class="card-body">
+            <form asp-action="CrearRecepcion" method="post" class="row g-3">
+                <div class="col-md-6">
+                    <label for="Fecha" class="form-label">Fecha de recepción</label>
+                    <input type="date" name="Fecha" id="Fecha" class="form-control" required />
+                </div>
+
+                <div class="col-md-6">
+                    <label for="ProovedorId" class="form-label">Proveedor</label>
+                    <select name="ProovedorId" id="ProovedorId" class="form-select" required>
+                        <option value="">-- Seleccione un proveedor --</option>
+                        @foreach (var proovedor in ViewBag.Proovedores)
+                        {
+                            <option value="@proovedor.Value">@proovedor.Text</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="col-12 text-end mt-4">
+                    <button type="submit" class="btn btn-success">
+                        <i class="lni lni-checkmark"></i> Registrar
+                    </button>
+                    <a asp-action="Index" asp-controller="Recepcion" class="btn btn-secondary ms-2">
+                        Cancelar
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

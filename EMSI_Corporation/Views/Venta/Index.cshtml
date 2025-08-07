@@ -1,0 +1,61 @@
+﻿@model List<EMSI_Corporation.Models.Venta>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var extintores = ViewBag.extintores as List<EMSI_Corporation.Models.Extintor>;
+}
+
+<main>
+    <!--
+        public int IdVenta { get; set; }
+        public DateTime FechaVenta { get; set; }
+        public string MetodoPago { get; set; }
+        public decimal Total { get; set; }
+
+        [ForeignKey("Cliente")]
+        public int Cliente_ID { get; set; }
+        public Cliente Cliente { get; set; }
+
+        [ForeignKey("Empleado")]
+        public int Empleado_ID { get; set; }
+        public Empleado Empleado { get; set; }
+    -->
+    <div class="d-flex justify-content-end mb-3">
+        <a class="btn btn-primary" asp-controller="Venta" asp-action="Registrar" >Agregar Venta</a>
+    </div>
+
+    <table class="table table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Fecha de venta</th>
+                <th>Método de pago</th>
+                <th>Total</th>
+                <th>Cliente</th>
+                <th>Empleado</th>
+                <th>Extintor</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var v in Model)
+            {
+                var ext = extintores.Find(e => e.Venta_ID == v.IdVenta);
+                <tr>
+                    <td>@v.IdVenta</td>
+                    <td>@v.FechaVenta</td>
+                    <td>@v.MetodoPago</td>
+                    <td>@v.Total</td>
+                    <td>@v.Cliente.NomCliente</td>
+                    <td>@v.Empleado.IdEmpleado</td>
+                    @if (ext != null)
+                    {
+                        <td>@ext.IdExtintor</td>
+                    }
+                </tr>
+
+
+                
+            }
+        </tbody>
+    </table>
+</main>

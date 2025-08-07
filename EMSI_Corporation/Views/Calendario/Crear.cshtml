@@ -1,0 +1,125 @@
+﻿@model EMSI_Corporation.ViewModels.EventoCalendarioVM
+
+@{
+    ViewData["Title"] = "Crear Evento";
+}
+
+<h2>Crear Evento</h2>
+
+<form asp-action="Crear" method="post" novalidate>
+    @Html.AntiForgeryToken()
+    <div class="mb-3">
+        <label asp-for="Titulo" class="form-label"></label>
+        <input asp-for="Titulo" class="form-control" />
+        <span asp-validation-for="Titulo" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Descripcion" class="form-label"></label>
+        <textarea asp-for="Descripcion" class="form-control"></textarea>
+        <span asp-validation-for="Descripcion" class="text-danger"></span>
+    </div>
+
+    <input asp-for="FechaInicio" type="datetime-local" class="form-control"
+           min="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")"
+           value="@Model.FechaInicio.ToString("yyyy-MM-ddTHH:mm")"
+           oninvalid="this.setCustomValidity('La fecha de inicio debe ser igual o posterior a la fecha actual.')"
+           oninput="this.setCustomValidity('')" />
+
+
+    <div class="mb-3">
+        <label asp-for="FechaFin" class="form-label"></label>
+        <input asp-for="FechaFin" type="datetime-local" class="form-control"
+               min="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")"
+               value="@(Model.FechaFin?.ToString("yyyy-MM-ddTHH:mm") ?? "")"
+               oninvalid="this.setCustomValidity('La fecha de fin debe ser igual o posterior a la actual.')"
+               oninput="this.setCustomValidity('')" />
+        <span asp-validation-for="FechaFin" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Color" class="form-label"></label>
+        <select asp-for="Color" class="form-control">
+            <option value="#007bff">Azul</option>
+            <option value="#28a745">Verde</option>
+            <option value="#dc3545">Rojo</option>
+            <option value="#ffc107">Amarillo</option>
+            <option value="#6f42c1">Morado</option>
+            <option value="#20c997">Turquesa</option>
+            <option value="#fd7e14">Naranja</option>
+        </select>
+        <span asp-validation-for="Color" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Guardar</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.querySelector('form');
+            const fechaInicioInput = document.querySelector('#FechaInicio');
+            const fechaFinInput = document.querySelector('#FechaFin');
+
+            form.addEventListener('submit', function (e) {
+                // Limpiar mensajes previos
+                document.querySelectorAll('.text-danger-custom').forEach(el => el.remove());
+
+                const errores = [];
+
+                const fechaInicio = new Date(fechaInicioInput.value);
+                const fechaFin = new Date(fechaFinInput.value);
+                const hoy = new Date();
+                hoy.setSeconds(0, 0); // Precisión para comparación
+
+                // Validar Fecha Inicio
+                if (!fechaInicioInput.value) {
+                    errores.push({ campo: fechaInicioInput, mensaje: "La fecha de inicio es obligatoria." });
+                } else if (fechaInicio < hoy) {
+                    errores.push({ campo: fechaInicioInput, mensaje: "La fecha de inicio debe ser igual o posterior a hoy." });
+                }
+
+                // Validar Fecha Fin solo si tiene valor
+                if (fechaFinInput.value) {
+                    if (fechaFin < fechaInicio) {
+                        errores.push({ campo: fechaFinInput, mensaje: "La fecha de fin no puede ser anterior a la fecha de inicio." });
+                    }
+                }
+
+                if (errores.length > 0) {
+                    e.preventDefault(); // Evita que el formulario se envíe
+
+                    errores.forEach(error => {
+                        const span = document.createElement("span");
+                        span.className = "text-danger text-danger-custom d-block mt-1";
+                        span.innerText = error.mensaje;
+                        error.campo.parentElement.appendChild(span);
+                    });
+                }
+            });
+        });
+    </script>
+}
+<script>
+    flatpickr("#FechaInicio", {
+        enableTime: true,
+        dateFormat: "Y-m-d H:i",
+        time_24hr: true,
+        locale: "es",
+        minDate: "today"
+    });
+
+    flatpickr("#FechaFin", {
+        enableTime: true,
+        dateFormat: "Y-m-d H:i",
+        time_24hr: true,
+        locale: "es",
+        minDate: "today"
+    });
+</script>
+
+
+

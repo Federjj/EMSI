@@ -1,0 +1,57 @@
+﻿@{
+    ViewData["Title"] = "Bienvenido";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var fechaHoy = DateTime.Now;
+}
+
+<style>
+    .bienvenida-card {
+        background-color: #ffffff;
+        border-left: 8px solid #BC1C34;
+        padding: 3rem 2rem;
+        border-radius: 1.5rem;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        max-width: 800px;
+        margin: 5rem auto;
+        text-align: center;
+    }
+
+    .bienvenida-titulo {
+        color: #BC1C34;
+        font-weight: bold;
+    }
+
+    .bienvenida-fecha {
+        font-size: 1.3rem;
+        color: #333;
+    }
+</style>
+
+<div class="bienvenida-card">
+    <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Welcome Icon" width="100" class="mb-4">
+
+    <h1 class="bienvenida-titulo display-5">¡Bienvenido al sistema EMSI!</h1>
+    <p class="fs-5 text-muted mb-4">Esperamos que tengas una excelente jornada 😊</p>
+
+    <div class="bienvenida-fecha">
+        <p><strong>Fecha actual:</strong> @fechaHoy.ToString("dddd, dd MMMM yyyy")</p>
+        <p><strong>Hora actual:</strong> <span id="reloj"></span></p>
+    </div>
+</div>
+
+<script>
+    function actualizarHora() {
+        const ahora = new Date();
+        const opciones = {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: true
+        };
+        const horaFormateada = ahora.toLocaleTimeString('es-PE', opciones);
+        document.getElementById('reloj').textContent = horaFormateada;
+    }
+
+    setInterval(actualizarHora, 1000); // Actualiza cada segundo
+    actualizarHora(); // Ejecutar inmediatamente al cargar
+</script>

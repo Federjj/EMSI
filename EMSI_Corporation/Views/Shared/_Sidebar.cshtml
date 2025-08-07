@@ -1,0 +1,118 @@
+﻿@* Views/Shared/_Sidebar.cshtml *@
+<link rel="stylesheet" href="~/css/Sidebars.css" />
+<link rel="stylesheet" href="https://cdn.lineicons.com/3.0/lineicons.css">
+
+<div class="wrapper">
+    <aside id="sidebar" class="expand">
+        @* Sidebar estático y expandido *@
+        <div class="d-flex align-items-center justify-content-center py-3">
+            <div class="sidebar-logo">
+                <a href="#">EMSI Corporation</a>
+            </div>
+        </div>
+        <ul class="sidebar-nav">
+            <li class="sidebar-item">
+                <a asp-controller="Cuenta" asp-action="Perfil" class="sidebar-link">
+                    <i class="lni lni-user"></i>
+                    <span>Perfil</span>
+                </a>
+            </li>
+
+            <li class="sidebar-item">
+                <a asp-controller="Acceso" asp-action="Stakeholders_Empleado" class="sidebar-link">
+                    <i class="lni lni-users"></i>
+                    <span>Empleados</span>
+                </a>
+            </li>
+
+            <!-- Operaciones -->
+            <li class="sidebar-item">
+                <a href="#" class="sidebar-link has-dropdown" data-bs-toggle="collapse" data-bs-target="#operacionesSubmenu" aria-expanded="false">
+                    <i class="lni lni-protection"></i>
+                    <span>Operaciones</span>
+                </a>
+                <ul class="sidebar-dropdown list-unstyled collapse" id="operacionesSubmenu">
+                    <li class="sidebar-item">
+                        <a asp-controller="Recepcion" asp-action="Index" class="sidebar-link">Recepción</a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a asp-controller="Inventario" asp-action="Inventario" class="sidebar-link">Inventario</a>
+                    </li>
+                </ul>
+            </li>
+
+            <!-- Socios -->
+            <li class="sidebar-item">
+                <a href="#" class="sidebar-link has-dropdown" data-bs-toggle="collapse" data-bs-target="#sociosSubmenu" aria-expanded="false">
+                    <i class="lni lni-network"></i>
+                    <span>Socios</span>
+                </a>
+                <ul class="sidebar-dropdown list-unstyled collapse" id="sociosSubmenu">
+                    <li class="sidebar-item">
+                        <a asp-controller="Acceso" asp-action="Stakeholders_Proovedor" class="sidebar-link">
+                            <i class="lni lni-delivery"></i> Proveedores
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a asp-controller="Acceso" asp-action="Stakeholders_Cliente" class="sidebar-link">
+                            <i class="lni lni-users"></i> Clientes
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="sidebar-item">
+                <a asp-controller="Venta" asp-action="Index" class="sidebar-link">
+                    <i class="lni lni-popup"></i>
+                    <span>Ventas</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a asp-controller="Servicio" asp-action="SeleccionClienteTrabajador" class="sidebar-link">
+                    <i class="lni lni-popup"></i>
+                    <span>Reporte técnico</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a asp-controller="Calendario" asp-action="Index" class="sidebar-link">
+                    <i class="lni lni-calendar"></i>
+                    <span>Calendario</span>
+                </a>
+            </li>
+        </ul>
+
+        <div class="sidebar-footer">
+            <a href="#" class="sidebar-link" data-bs-toggle="modal" data-bs-target="#logoutModal">
+                <i class="lni lni-exit"></i>
+                <span>Cerrar Sesión</span>
+            </a>
+        </div>
+
+
+    </aside>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/Sidebar.js"></script>
+<!-- Modal de confirmación para logout -->
+<div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg-light">
+            <div class="modal-header">
+                <h5 class="modal-title" id="logoutModalLabel">¿Cerrar sesión?</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                ¿Estás seguro de que deseas cerrar sesión?
+            </div>
+            <div class="modal-footer">
+                <form id="logout-form" asp-controller="Acceso" asp-action="Logout" method="post">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn btn-danger">Sí, cerrar sesión</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+

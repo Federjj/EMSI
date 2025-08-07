@@ -1,0 +1,145 @@
+﻿@import 'vars.css';
+
+* {
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    /*background: linear-gradient(180deg, #ffffff 0%, #ffffff 75%, #BC1C34 100%);*/
+}
+
+.login-body {
+    background-color: var(--color-rojo);
+    overflow: hidden
+}
+
+.sqr-anim {
+    background-color: white;
+    width: 400vw;
+    aspect-ratio: 1/1;
+    border-radius: 300vw 280vw 250vw 260vw;
+    position: absolute;
+    animation: rotate linear infinite 10s;
+    z-index:-1;
+    bottom: 10vh;
+}
+
+@keyframes rotate{
+    0%{
+        transform: rotate(0deg);
+    }
+    50% {
+        transform: rotate(180deg);
+    }
+    100%{
+        transform: rotate(360deg);
+    }
+}
+
+.container {
+    width: 100%;
+    height: 80%;
+    display: flex;
+}
+
+.panel-izquierdo {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.panel-izquierdo img{
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.panel-derecho {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.Titulo {
+    color: var(--color-rojo);
+    font-weight: 700;
+    font-size: 2.5rem;
+}
+
+.formulario {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+    max-width: 300px;
+}
+
+.formulario label {
+    font-weight: bold;
+}
+
+.formulario input {
+    padding: 10px 60px 10px 10px;
+    border: none;
+    border-left: 4px solid black;
+    border-bottom: 2px solid black;
+    border-radius: 6px;
+    font-size: 1em;
+}
+
+.formulario input:focus {
+    outline: none;
+    border-color: #BC1C34;
+}
+
+.boton_ingresar {
+    margin-top: 20px;
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.boton_ingresar button {
+    padding: 12px 25px;
+    font-size: 1rem;
+    background-color: #BC1C34;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 100%; /* O usa max-width si prefieres limitarlo */
+    max-width: 300px;
+}
+
+.boton_ingresar button:hover {
+    background-color: #9e172a;
+}
+
+
+
+@media screen and (max-width: 800px){
+    .container {
+        width: 85%;
+        height: 80%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+    .sqr-anim {
+        bottom: unset;
+        top: 10vh;
+    }
+}
