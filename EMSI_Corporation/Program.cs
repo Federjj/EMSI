@@ -31,7 +31,19 @@ using (var scope = app.Services.CreateScope())
     var context = scope.ServiceProvider.GetRequiredService<AppDBContext>();
 
     // Aplicar migraciones pendientes
-    context.Database.EnsureCreated();
+    // Configurar conexión a PostgreSQL en producción
+    var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL");
+    if (!string.IsNullOrEmpty(connectionString))
+    {
+        // Configurar para Railway
+        context.Database.SetConnectionString(connectionString);
+        context.Database.Migrate();
+    }
+    else
+    {
+        // Para entorno local
+        context.Database.EnsureCreated();
+    }
 
     // Crear roles fijos si no existen
     var rolesFijos = new List<Rol>
