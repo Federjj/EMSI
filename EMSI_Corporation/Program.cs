@@ -12,9 +12,17 @@ QuestPDF.Settings.License = LicenseType.Community;
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+// Configurar conexión a PostgreSQL
+var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL");
+if (string.IsNullOrEmpty(connectionString))
+{
+    // Usar cadena local si no hay variable de entorno
+    connectionString = builder.Configuration.GetConnectionString("CadenaSQL");
+}
+
 builder.Services.AddDbContext<AppDBContext>(option =>
 {
-    option.UseNpgsql(builder.Configuration.GetConnectionString("CadenaSQL"));
+    option.UseNpgsql(connectionString);
 });
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -31,18 +39,14 @@ using (var scope = app.Services.CreateScope())
     var context = scope.ServiceProvider.GetRequiredService<AppDBContext>();
 
     // Aplicar migraciones pendientes
-    // Configurar conexión a PostgreSQL en producción
-    var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL");
-    if (!string.IsNullOrEmpty(connectionString))
+    // Ejecutar migraciones o crear base de datos
+    if (app.Environment.IsDevelopment())
     {
-        // Configurar para Railway
-        context.Database.SetConnectionString(connectionString);
-        context.Database.Migrate();
+        context.Database.EnsureCreated();
     }
     else
     {
-        // Para entorno local
-        context.Database.EnsureCreated();
+        context.Database.Migrate();
     }
 
     // Crear roles fijos si no existen
