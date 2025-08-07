@@ -1,23 +1,20 @@
-# Usar la imagen base de SDK para construir la aplicación
+# Utiliza la imagen de SDK de .NET 8 para construir
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
-# Copiar los archivos del proyecto y restaurar dependencias
-COPY ["EMSI_Corporation/EMSI_Corporation.csproj", "EMSI_Corporation/"]
+# Copia los archivos del proyecto y restaura dependencias
+COPY . .
 RUN dotnet restore "EMSI_Corporation/EMSI_Corporation.csproj"
 
-# Copiar todo el código fuente y compilar
-COPY . .
-WORKDIR "/src/EMSI_Corporation"
-RUN dotnet build "EMSI_Corporation.csproj" -c Release -o /app/build
+# Construye el proyecto
+RUN dotnet build "EMSI_Corporation/EMSI_Corporation.csproj" -c Release -o /app/build
 
-# Publicar la aplicación
+# Publica la aplicación
 FROM build AS publish
-RUN dotnet publish "EMSI_Corporation.csproj" -c Release -o /app/publish
+RUN dotnet publish "EMSI_Corporation/EMSI_Corporation.csproj" -c Release -o /app/publish
 
-# Imagen final de ejecución
+# Utiliza la imagen de tiempo de ejecución de ASP.NET
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 WORKDIR /app
-EXPOSE 80
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "EMSI_Corporation.dll"]
