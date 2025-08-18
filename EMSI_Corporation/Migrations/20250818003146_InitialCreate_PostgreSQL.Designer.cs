@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EMSI_Corporation.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20250807232146_RemoveCollationReferences")]
-    partial class RemoveCollationReferences
+    [Migration("20250818003146_InitialCreate_PostgreSQL")]
+    partial class InitialCreate_PostgreSQL
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
